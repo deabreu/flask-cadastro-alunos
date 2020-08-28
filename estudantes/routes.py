@@ -11,7 +11,13 @@ def local_index():
 
     return render_template('')
 
-@app.route('/inserir', methods=[ 'POST'])
+
+@app.route('/tela_inserir', methods=['GET'])
+def tela_inserir():
+    return render_template('tela_inserir.html')
+
+
+@app.route('/inserir', methods=['POST'])
 def inserir():
     nome = request.form.get('nome')
     pai = request.form.get('pai')
@@ -36,8 +42,13 @@ def inserir():
 
 @app.route('/listar_todos', methods=[ 'GET'])
 def listar():
-    estudantes = Estudante.query.all()
+    estudantes = Estudante.query.limit(1000).all() # limitador de segurança
     return render_template('', estudantes)
+
+
+@app.route('/tela_alterar', methods=['GET'])
+def tela_alterar():
+    return render_template('tela_alterar.html')
 
 
 @app.route('/alterar/<int:id>', methods=['PUT'])
@@ -46,14 +57,37 @@ def alterar(id):
         estudante = Estudante.query.filter(Estudante.id == id).first()
         if estudante:
             nome = request.form.get('nome')
-            nome = request.form.get('pai')
-            nome = request.form.get('mae')
-            nome = request.form.get('data_nascimento')
-            nome = request.form.get('cpf')
-            nome = request.form.get('documento_identidade')
-            nome = request.form.get('orgao_expedidor')
-            nome = request.form.get('data_expiracao')
+            pai = request.form.get('pai')
+            mae = request.form.get('mae')
+            nasc = request.form.get('data_nascimento')
+            cpf = request.form.get('cpf')
+            doc_id = request.form.get('documento_identidade')
+            orgao_expedidor = request.form.get('orgao_expedidor')
+            data_expiracao = request.form.get('data_expiracao')
+            estudante.nome = nome
+            estudante.pai = pai
+            estudante.mae = mae
+            estudante.dt_nasc = data_from_str(nasc)
+            estudante.cpf = cpf
+            estudante.doc_id = int(doc_id)
+            estudante.org_exp_doc_id = orgao_expedidor
+            estudante.dt_exp_doc_id = data_from_str(data_expiracao)
+    redirect(url_for('local_index'))
 
+
+@app.route('/tela_remover', methods=['GET'])
+def tela_remover():
+    return render_template('tela_remover.html')
+
+
+@app.route('/remover/<int:id>', methods=['DELETE'])
+def remover(id):
+    if isinstance(id, int):
+        estudante = Estudante.query.filter(Estudante.id == id).first()
+        if estudante:
+            db.session.delete(estudante)
+            db.commit()
+    redirect(url_for('local_index'))
 
 
 def data_from_str(string):

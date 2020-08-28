@@ -1,0 +1,15 @@
+{% extends face %}
+
+{% block conteudo %}
+    <div>
+        Inserir Aluno
+    </div>
+
+    <div>
+        <form method="post" action="{{ url_for('inserir') }}">
+            <div> <span> Nome <input type="text" name="nome"> </span></div>
+        </form>
+    </div>
+    
+
+{% endblock %}

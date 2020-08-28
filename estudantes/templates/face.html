@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block titulo %}  {% endblock %}</title>
+    <link type="stylesheet" href="{{ url_for('static', filename='stylesheets/main.css') }}">
+</head>
+<body>
+    <nav></nav>
+
+    {% block conteudo %}  {% endblock %}
+
+    <footer> Cadastro de Estudantes </footer>
+</body>
+</html>
